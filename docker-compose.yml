@@ -1,0 +1,36 @@
+name: redcat
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - "80:80"
+    depends_on:
+            - mssql
+    volumes:
+            - './src:/var/www/html'
+    networks:
+            - redcat
+    hostname: FRODO
+    env_file:
+        -   .env
+  mssql:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    ports: 
+        -   "1433:1433"
+    expose:
+        - 1433
+    environment: 
+        -   "ACCEPT_EULA=Y"
+        -   "MSSQL_SA_PASSWORD=yourStrong(!)Password"
+    volumes:
+        -   './DB/mssql/data:/var/opt/mssql/data'
+        -   './DB/mssql/log:/var/opt/mssql/log'
+        -   './DB/mssql/secrets:/var/opt/mssql/secrets'
+    networks:
+            - redcat
+    env_file:
+      - .env
+networks:
+    redcat:
+        driver: bridge
