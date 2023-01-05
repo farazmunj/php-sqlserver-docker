@@ -12,6 +12,8 @@ RUN apt-get update
 RUN ACCEPT_EULA=Y apt-get -y --no-install-recommends install msodbcsql17 unixodbc-dev 
 RUN pecl install sqlsrv
 RUN pecl install pdo_sqlsrv
+RUN apt-get install -y libzip-dev zip
+RUN docker-php-ext-install zip
 RUN docker-php-ext-enable sqlsrv pdo_sqlsrv
 
 RUN echo 'PassEnv LOCAL_DB_PASS' >> /etc/apache2/conf-enabled/expose-env.conf \
